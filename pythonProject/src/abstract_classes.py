@@ -10,15 +10,37 @@ class Character(ABC):
     def introduction(self):
         pass
 
-class Game(ABC):
-    # abstract class for mini-games
-
-    @abstractmethod
-    def run(self):
-        pass
 
 class Location(ABC):
     # abstract class for each section in the maze/tunnel
-    def choose_room(self):
+
+
+    @property
+    @abstractmethod
+    def left(self):
+        """property that gets the left location"""
+        pass
+
+    @property
+    @abstractmethod
+    def right(self):
+        """property that gets the right location"""
+        pass
+
+    @left.setter
+    @abstractmethod
+    def left(self, area=None):
+        """setter that sets left area"""
+        pass
+
+    @right.setter
+    @abstractmethod
+    def right(self, area=None):
+        """setter that sets right area"""
+        pass
+
+    @abstractmethod
+    def mini_game(self):
+        """plays mini_game and returns a bool"""
         pass
 
