@@ -4,7 +4,7 @@ import time
 import sys
 import select
 import random
-from src.game_effects import timed_print
+from game_effects import timed_print
 
 
 def input_with_timeout(prompt, timeout):
