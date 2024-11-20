@@ -4,7 +4,7 @@ import time
 import sys
 import select
 import random
-from src.game_effects import timed_print
+from game_effects import timed_print
 
 
 def input_with_timeout(prompt, timeout):
@@ -75,3 +75,7 @@ class MiniGames:
             return False
 
 
+
+mini_games = MiniGames()
+clicker = mini_games.quick_click("start message")
+word_jumb = mini_games.word_jumble("random")
