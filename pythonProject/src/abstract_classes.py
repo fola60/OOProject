@@ -44,3 +44,16 @@ class Location(ABC):
         """plays mini_game and returns a bool"""
         pass
 
+class Storage(ABC):
+
+    @abstractmethod
+    def add_item(self):
+        pass
+
+    @abstractmethod
+    def use_item(self, item):
+        pass
+
+    @abstractmethod
+    def get_item(self, item):
+        pass
