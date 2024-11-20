@@ -75,3 +75,7 @@ class MiniGames:
             return False
 
 
+
+mini_games = MiniGames()
+clicker = mini_games.quick_click("start message")
+word_jumb = mini_games.word_jumble("random")
