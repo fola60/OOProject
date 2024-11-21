@@ -32,9 +32,9 @@ class MiniGames:
         jumbled_word = ''.join(chars)
 
 
-
         timed_print("Unscramble this word: " + jumbled_word, delay=0.3)
         guess = input("Rearranged word: ")
+        time.sleep(1) # clears input buffer
         return guess == word # checks if guess was correct return True if it is and false otherwise
 
 
@@ -55,8 +55,8 @@ class MiniGames:
         # Question defined in qs, multiple choices defined in answers, answer index is answer
 
 
-        timed_print(qs,delay=0.2)
-        timed_print("....", delay=0.2)
+        timed_print(qs,delay=0.05)
+        timed_print("....", delay=0.05)
 
         for i, ans in enumerate(answers):
             # printing potential answers
@@ -67,15 +67,19 @@ class MiniGames:
             choice = int(input("Enter the number of question you think is correct."))
 
             # checking invalid input
+            time.sleep(1) # clears input buffer
             if choice > len(answers) or choice < 1:
                 return False
             return choice == answer + 1  # return True if user input was correct, + 1 to make up for index
         except ValueError:
             print("invalid input")
+            time.sleep(1) # clears input buffer
             return False
 
 
 
 mini_games = MiniGames()
 clicker = mini_games.quick_click("start message")
-word_jumb = mini_games.word_jumble("random")
+jumble = mini_games.word_jumble("word")
+clicker = mini_games.quick_click("start message")
+

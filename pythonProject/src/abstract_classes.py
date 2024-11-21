@@ -13,7 +13,8 @@ class Character(ABC):
 
 class Location(ABC):
     # abstract class for each section in the maze/tunnel
-
+    def __init__(self):
+        s
 
     @property
     @abstractmethod
