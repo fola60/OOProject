@@ -6,7 +6,6 @@ import select
 import random
 from game_effects import timed_print
 
-
 def input_with_timeout(prompt, timeout):
     print(prompt, end='', flush=True)
     start_time = time.time()
@@ -39,11 +38,11 @@ class MiniGames:
 
 
     def quick_click(self, msg="", time=2):
-        # game where player has to input a charcter withing {time} time
-        timed_print(msg)  
+        # game where player has to input a charcter within {time} time, msg prints at the start of the function
         try:
             # waits for user input for {time} seconds
-            user_input = input_with_timeout("Enter the letter G quick!!", timeout=time)
+            timed_print(msg)
+            user_input = input_with_timeout("Enter the letter G to disarm it! Quick!!", timeout=time)
             return 'G' == user_input.strip()  # .strip() removes spaces around char
         except Exception as e:
             print(f"Error: {e}")
@@ -76,10 +75,29 @@ class MiniGames:
             time.sleep(1) # clears input buffer
             return False
 
+    def memory_match(self, msg1, msg2):
+        print(msg1)
+        number = random.randint(800000, 999999)
+        print(number)
+        time.sleep(2.5)
+        print("\n" * 1000)
 
+        tries = 3
+        while tries > 0:
+            print(f"Quick guess the {msg2}")
+            try:
+                guess = int(input("Enter the number: "))
+                if guess == number:
+                    print("Correct!")
+                    return True
+                else:
+                    print("Wrong!")
+                    tries -= 1
+            except ValueError:
+                print("Enter a valid number.")
+
+        timed_print("Out of tries! The number was:", number)
 
 mini_games = MiniGames()
-clicker = mini_games.quick_click("start message")
-jumble = mini_games.word_jumble("word")
-clicker = mini_games.quick_click("start message")
-
+mini_games.memory_match("Memorize this number:", "number")
+mini_games.word_jumble("hey")

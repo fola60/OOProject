@@ -13,14 +13,16 @@ class Character(ABC):
 
 class Location(ABC):
     # abstract class for each section in the maze/tunnel
-    def __init__(self):
-        s
+    def __init__(self, User):
+        self.__left = None
+        self.__right = None
 
     @property
     @abstractmethod
     def left(self):
         """property that gets the left location"""
-        pass
+        return self.__left
+
 
     @property
     @abstractmethod
@@ -48,13 +50,6 @@ class Location(ABC):
 class Storage(ABC):
 
     @abstractmethod
-    def add_item(self):
+    def items(self):
         pass
 
-    @abstractmethod
-    def use_item(self, item):
-        pass
-
-    @abstractmethod
-    def get_item(self, item):
-        pass
