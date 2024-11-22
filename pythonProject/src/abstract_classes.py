@@ -43,9 +43,24 @@ class Location(ABC):
         pass
 
     @abstractmethod
-    def mini_game(self):
+    def mini_game(self, func):
         """plays mini_game and returns a bool"""
         pass
+
+    def chest(self):
+        """import from inventory """
+        pass
+
+    def interaction(self):
+        """inport charcter from characters """
+        pass
+
+
+
+
+
+
+
 
 class Storage(ABC):
 
