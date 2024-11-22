@@ -3,9 +3,6 @@ from game_effects import timed_print
 from inventory import Inventory
 from characters import User, Skeleton
 
-# User and Enemy classes as before (no changes needed)
-# (Assumed you've already defined `User` and `Enemy` properly)
-
 class Battle:
     def __init__(self, player, enemy):
         self.player = player
