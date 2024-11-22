@@ -1,5 +1,5 @@
 from game_effects import timed_print
-from src.abstract_classes import Storage
+from abstract_classes import Storage
 
 
 class Inventory(Storage):
