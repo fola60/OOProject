@@ -44,12 +44,12 @@ class Battle:
             # Player's turn
             if self.player_turn():
                 timed_print(f"{self.player.name} wins the battle!")
-                break  # End the battle
+                return True  # End the battle
 
             # Enemy's turn
             if self.enemy_turn():
                 timed_print(f"{self.enemy.name} wins the battle!")
-                break  # End the battle
+                return False  # End the battle
 
 
 if __name__ == "__main__":
