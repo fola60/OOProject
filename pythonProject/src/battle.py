@@ -14,7 +14,7 @@ class Battle:
         choice = input("Do you want to attack (a) or use item (i)? ").lower()
 
         if choice == 'a':
-            return self.attack_enemy(self.player, self.enemy)
+            return self.attack(self.player, self.enemy)
         elif choice == 'i':
             timed_print("Using item is not implemented yet.")
             return False  # Continue the battle after item choice
@@ -24,9 +24,9 @@ class Battle:
 
     def enemy_turn(self):
         timed_print(f"{self.enemy.name}'s turn!")
-        return self.attack_enemy(self.enemy, self.player)
+        return self.attack(self.enemy, self.player)
 
-    def attack_enemy(self, attacker, defender):
+    def attack(self, attacker, defender):
         damage = attacker.damage  # Get the attacker's damage
         defender.take_damage(damage)  # Apply damage to the defender
         timed_print(f"{attacker.name} attacks {defender.name} for {damage} damage!")
