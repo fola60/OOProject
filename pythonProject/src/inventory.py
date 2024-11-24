@@ -3,8 +3,10 @@ from abstract_classes import Storage
 
 
 class Inventory(Storage):
-    def __init__(self):
-        self.__items = [] # User items
+    def __init__(self, items=None):
+        if items is None:
+            items = []
+        self.__items = items # User items
 
     def use_item(self, index):
         return self.__items.pop(index)
@@ -21,6 +23,18 @@ class Inventory(Storage):
         items = self.__items
         for i, item in enumerate(items):
             timed_print(f"{i + 1}: {item}")
+
+    def encode(self):
+        """ encodes inventory into json object"""
+        return {
+            "items": self.items
+        }
+
+    @classmethod
+    def decode(self, data):
+        """ decodes json object of class inventory into class inventory"""
+        instance = Inventory(data["items"])
+        return instance
 
 
 class Chest(Storage):

@@ -4,15 +4,17 @@ from abc import abstractproperty
 from abstract_classes import Character
 from game_effects import timed_print
 from inventory import Inventory
+from src.areas import PyramidGame
+import json
 
 class User(Character):
-    def __init__(self, name, location, damage):
+    def __init__(self, name, location):
         self.__location = location # Current player location
         self.name = name  # Player name
         self.__health = 5  # Player health
         self.inventory = Inventory()  # Player's inventory
-        self.__damage = damage  # Player damage
         self.status = True  # True for alive false for dead
+
 
     def introduction(self):
         print(f"{self.name} enters the world at {self.__location}. Good luck!")
@@ -20,6 +22,7 @@ class User(Character):
 
     def take_damage(self, damage):
         self.__health -= damage
+
 
     @property
     def health(self):
@@ -34,9 +37,15 @@ class User(Character):
         else:
             self.__health = amount
 
+
     @property
-    def damage(self):
-        return self.__damage  # Returns the player's damage value
+    def location(self):
+        return self.__location
+
+    @location.setter
+    def location(self, location):
+        self.__location = location
+
 
     def process_death(self):
         timed_print(f"{self.name} has perished!")
@@ -44,7 +53,33 @@ class User(Character):
         # reset location back to most recent death
 
     def check_status(self): # Checks current status of Player
-        return f"Health: {self.__health}, Damage: {self.__damage}, Inventory: {self.inventory}"
+        return f"Health: {self.__health},  Inventory: {self.inventory}"
+
+
+    def encode(self):
+        """ encodes character class to json object"""
+        return {
+            "name": self.name,
+            "location": self.location.encode(),
+            "health": self.health,
+            "status": self.status,
+            "inventory": self.inventory.encode()
+        }
+
+
+    @classmethod
+    def decode(cls, data=None):
+        """ decodes character json object to character class"""
+        if data is None:
+            data = {}
+        from areas import Door
+        instance = User(data["name"], Door.decode(data["location"]) )
+        instance.health = data["health"]
+        instance.inventory = Inventory.decode(data["inventory"])
+        instance.status = True
+
+        return instance
+
 
 
 
@@ -90,11 +125,14 @@ class NPC(Character):
 
     def interact(self):
         if not self._interacted:
-            interaction = f"{self.name}: {self.__dialog}"
+            self.introduction()
             self._interacted = True
         else:
-            interaction = f"{self.name} has already been interacted with."
-        return interaction
+            timed_print("{self.name} has already been interacted with.")
+
+
+    def introduction(self):
+        timed_print(f"Hello my name is {self.name}")
 
 
 
@@ -102,6 +140,7 @@ warriors = Enemy("Ancient Egyptian Warriors", "Grunts", 3, 1)
 mummy_guardians = Enemy("Mummy Guardians", "Guards", 5, 2)
 warden = Enemy("Tomb Warden", "Mini Boss", 7, 3)
 pharaoh = Enemy("The Last Pharaoh", "Final Boss",10, 5)
+skeleton = Enemy("Skeleton", "guard", 3, 1)
 
 blacksmith = NPC("Hewg",
                  "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."

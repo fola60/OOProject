@@ -1,8 +1,9 @@
 from abstract_classes import Character
 from game_effects import timed_print
 from inventory import Inventory
-from characters import User, Skeleton
+from characters import User
 from game_effects import timed_print
+from src.config import damage_map
 
 
 class Battle:
@@ -12,7 +13,7 @@ class Battle:
         self.damage_map = damage_map  #map of weapon damage against enemies
 
     def player_turn(self):
-        print(f"{self.player.name}'s turn!")
+        timed_print(f"{self.player.name}'s turn!")
         choice = input("Do you want to attack (a) or use item (i)? ").lower()
 
         if choice == 'a':
@@ -20,32 +21,32 @@ class Battle:
         elif choice == 'i':
             return self.use_item()
         else:
-            print("Invalid choice. You can only attack or use an item.")
+            timed_print("Invalid choice. You can only attack or use an item.")
             return self.player_turn()  #retry the player's turn
 
     def enemy_turn(self):
-        print(f"{self.enemy.name}'s turn!")
+        timed_print(f"{self.enemy.name}'s turn!")
         return self.attack(self.enemy, self.player)
 
     def attack(self, attacker, defender):
         #get basic damage from the attacker
         damage = attacker.damage
         defender.take_damage(damage)
-        print(f"{attacker.name} attacks {defender.name} for {damage} damage!")
+        timed_print(f"{attacker.name} attacks {defender.name} for {damage} damage!")
 
         if defender.health <= 0:
-            print(f"{defender.name} has been defeated!")
+            timed_print(f"{defender.name} has been defeated!")
             return True  #end the battle
         else:
-            print(f"{defender.name} has {defender.health} health remaining.")
+            timed_print(f"{defender.name} has {defender.health} health remaining.")
         return False  #continue the battle
 
     def use_item(self):
         if not self.player.inventory.items:
-            print("You have no items in your inventory!")
+            timed_print("You have no items in your inventory!")
             return False  #continue battle if no items
 
-        print("Available items:")
+        timed_print("Available items:")
         self.player.inventory.display_items()
 
         try:
@@ -56,25 +57,25 @@ class Battle:
                 damage = self.damage_map.get(self.enemy.name.lower(), {}).get(item, 0)
 
                 if damage > 0:
-                    print(f"You used {item} against {self.enemy.name}, dealing {damage} damage!")
+                    timed_print(f"You used {item} against {self.enemy.name}, dealing {damage} damage!")
                     self.enemy.take_damage(damage)
                     #remove the item from the player's inventory after use
                     self.player.inventory.use_item(item_choice)
 
                     #check if the enemy is defeated
                     if self.enemy.health <= 0:
-                        print(f"{self.enemy.name} has been defeated!")
+                        timed_print(f"{self.enemy.name} has been defeated!")
                         return True  #end battle
                     else:
-                        print(f"{self.enemy.name} has {self.enemy.health} health remaining.")
+                        timed_print(f"{self.enemy.name} has {self.enemy.health} health remaining.")
                 else:
-                    print(f"{item} is ineffective against {self.enemy.name}!")
+                    timed_print(f"{item} is ineffective against {self.enemy.name}!")
             else:
-                print("Invalid selection.")
+                timed_print("Invalid selection.")
         except ValueError:
-            print("Invalid input. Please enter a number.")
+            timed_print("Invalid input. Please enter a number.")
         except IndexError:
-            print("Invalid item choice.")
+            timed_print("Invalid item choice.")
 
         return False  #continue battle if no valid item used
 
@@ -82,25 +83,16 @@ class Battle:
         while True:
             #player turn and check if they won
             if self.player_turn():
-                print(f"{self.player.name} wins the battle!")
+                timed_print(f"{self.player.name} wins the battle!")
                 break  #end battle
 
             #enemy turn and check if they won
             if self.enemy_turn():
-                print(f"{self.enemy.name} wins the battle!")
+                timed_print(f"{self.enemy.name} wins the battle!")
                 break  #end battle
 
-damage_map = {}
 
-#initialize skeleton's damage map
-damage_map['skeleton'] = {}
-damage_map['skeleton']['torch'] = 1
-damage_map['skeleton']['mace'] = 3
 
-#initialize mummy's damage map
-damage_map['mummy'] = {}
-damage_map['mummy']['torch'] = 3
-damage_map['mummy']['mace'] = 1
 
 
 if __name__ == "__main__":

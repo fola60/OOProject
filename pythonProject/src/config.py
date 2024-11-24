@@ -8,3 +8,5 @@ damage_map['skeleton']['mace'] = 3
 damage_map['mummy']['torch'] = 3
 damage_map['mummy']['mace'] = 1
 
+
+
