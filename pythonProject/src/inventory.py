@@ -1,7 +1,6 @@
+import config
 from game_effects import timed_print
 from abstract_classes import Storage
-
-
 
 
 class Inventory(Storage):
@@ -17,7 +16,8 @@ class Inventory(Storage):
 
     @max_inventory_size.setter
     def max_inventory_size(self, amount):
-        self.max_inventory_size = self.__max_inventory_size + amount
+        self.__max_inventory_size = amount
+
 
     def use_item(self, index):
         return self.__items.pop(index)
@@ -39,16 +39,27 @@ class Inventory(Storage):
             timed_print(f"{i + 1}: {item}")
 
     def clear(self):
-        self.items = []
+        self.__items = []
 
 
     def get_consumable_items(self):
         """ returns list of consumable items"""
-        pass
+        consumable_items = []
+        for item in self.items:
+            if item in config.consumable_item_list:  # check if item can be consumer and it to list
+                consumable_items.append(item)
+
+        return consumable_items
 
     def get_equippable_items(self):
         """ returns list of equippable items"""
-        pass
+        equippable_items = []
+        for item in self.items:
+            if item in config.equippable_item_list: # check if item can be equipped and it to list
+                equippable_items.append(item)
+
+        return equippable_items
+
 
     def encode(self):
         """ encodes inventory into json object"""
@@ -57,7 +68,7 @@ class Inventory(Storage):
         }
 
     @classmethod
-    def decode(self, data):
+    def decode(cls, data):
         """ decodes json object of class inventory into class inventory"""
         instance = Inventory(data["items"])
         return instance
@@ -78,7 +89,7 @@ class Chest(Storage):
 
     def display_items(self):
         for i, item in enumerate(self.__items):
-            timed_print(f"{i + 1}: {item}")
+            timed_print(f"{i + 1}: {item}", delay=0.01)
 
     def pick_items(self, index):
         if 0 <= index < len(self.__items):

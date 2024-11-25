@@ -12,49 +12,63 @@ class Character(ABC):
 
 
 class Location(ABC):
-    # abstract class for each section in the maze/tunnel
-    def __init__(self, User):
-        self.__left = None
-        self.__right = None
+    def __init__(self, door_number):
+        self._left = None
+        self._right = None
+        self._door_number = door_number
+        self._minigame = None
 
     @property
     @abstractmethod
     def left(self):
-        """property that gets the left location"""
-        return self.__left
-
+        """Property that gets the left location"""
+        pass
 
     @property
     @abstractmethod
     def right(self):
-        """property that gets the right location"""
+        """Property that gets the right location"""
         pass
 
     @left.setter
     @abstractmethod
-    def left(self, area=None):
-        """setter that sets left area"""
+    def left(self, area):
+        """Setter that sets left area"""
         pass
 
     @right.setter
     @abstractmethod
-    def right(self, area=None):
-        """setter that sets right area"""
+    def right(self, area):
+        """Setter that sets right area"""
         pass
 
     @abstractmethod
-    def mini_game(self, func):
-        """plays mini_game and returns a bool"""
+    def play_minigame(self):
+        """Method to play the minigame at this location"""
         pass
 
-    def chest(self):
-        """import from inventory """
+    @abstractmethod
+    def fight_guard(self, player, enemy):
+        """ Before player can choose room they must fight and defeat the enemy"""
         pass
 
-    def interaction(self):
-        """inport charcter from characters """
+    @abstractmethod
+    def interact_with_npc(self):
+        """ Gain information from local npc"""
         pass
 
+    def encode(self):
+        """ encodes class into json object"""
+        return {
+            "door_number": self._door_number,
+            "left": self._left.encode() if self._left else None,
+            "right": self._right.encode() if self._right else None,
+            "mini_game": self._minigame,
+        }
+
+    @abstractmethod
+    def view_chest(self):
+        pass
 
 
 

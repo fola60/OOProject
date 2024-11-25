@@ -1,10 +1,9 @@
 # This file will contain all characters from which other files can import
 import config
-
-from distutils.command.config import config
 from abstract_classes import Character
 from game_effects import timed_print
 from inventory import Inventory
+
 
 
 class User(Character):
@@ -13,7 +12,8 @@ class User(Character):
     def __init__(self, name, location):
         self.__location = location # Current player location
         self.name = name  # Player name
-        self.__health = 5  # Player health
+        self.__health = 100  # Player health
+        self.max_health_size = 100
         self.inventory = Inventory()  # Player's inventory
         self.status = True  # True for alive false for dead
         self.__weapon = None
@@ -23,6 +23,8 @@ class User(Character):
     def weapon(self):
         if self.__weapon is None:
             return 'fist'
+
+        return self.__weapon
 
     @weapon.setter
     def weapon(self, value):
@@ -57,7 +59,8 @@ class User(Character):
             self.status = False
             self.process_death()  # Calls death function
         else:
-            self.__health = amount
+            if 0 < amount < self.max_health_size + 1:
+                self.__health = amount
 
 
     @property
@@ -78,23 +81,40 @@ class User(Character):
             timed_print("Cannot consume that item.")
             return
 
-        #if item in ['elixir', 'LifeWater', 'BlueLotus', 'charredApple', 'EnergyVial', 'CleansingSand']:
-        self.health = self.health + config.health_boost[item]
-        timed_print(f"Health increased by {config.health_boost[item]}")
-        return
+        if item in config.health_item_list:
+            self.health = self.health + config.health_gain[item]
+            timed_print(f"Health increased by {config.health_gain[item]}")
+            return
+
+        if item in config.max_health_item_list:
+            self.max_health_size = self.max_health_size + config.health_boost[item]
+            timed_print(f"Max health increased by {config.health_boost[item]}")
+            return
 
     def equip(self, item):
-        if item in ['JarOfHolding', 'PapyrusSatchel', 'BagOfTheDuat', 'PharaohBandolier']:
+        if item not in config.equippable_item_list:
+            timed_print("Item not equippable")
+            return
+
+        if item in config.bag_list:
             self.inventory.max_inventory_size = config.inventory_size_boost[item]
             timed_print(f"Inventory size increased by {config.inventory_size_boost[item]}")
             return
 
+        if item in config.weapon_list:
+            self.weapon = item
+            timed_print(f"Equipped weapon: {item}")
+            return
+
+        if item in config.armour_list:
+            self.armour = item
+            timed_print(f"Equipped armour: {item}")
+            return
 
 
     def process_death(self):
         timed_print(f"{self.name} has perished!")
-        self.inventory.clear()
-        # reset location back to most recent death
+
 
     def check_status(self): # Checks current status of Player
         return f"Health: {self.__health},  Inventory: {self.inventory}"
@@ -107,7 +127,9 @@ class User(Character):
             "location": self.location.encode(),
             "health": self.health,
             "status": self.status,
-            "inventory": self.inventory.encode()
+            "inventory": self.inventory.encode(),
+            "weapon": self.weapon,
+            "armour": self.armour
         }
 
 
@@ -120,10 +142,11 @@ class User(Character):
         instance = User(data["name"], Door.decode(data["location"]) )
         instance.health = data["health"]
         instance.inventory = Inventory.decode(data["inventory"])
+        instance.armour = data["armour"]
+        instance.weapon = data["weapon"]
         instance.status = True
 
         return instance
-
 
 
 
@@ -133,6 +156,7 @@ class Enemy(Character):
         self.rank = rank
         self.__health = health
         self.__damage = damage
+        self.armour = 'body'
         self.status = True
 
     def introduction(self):
@@ -179,12 +203,10 @@ class NPC(Character):
         timed_print(f"Hello my name is {self.name}")
 
 
-
-warriors = Enemy("Ancient Egyptian Warriors", "Grunts", 3, 1)
-mummy_guardians = Enemy("Mummy Guardians", "Guards", 5, 2)
-warden = Enemy("Tomb Warden", "Mini Boss", 7, 3)
-pharaoh = Enemy("The Last Pharaoh", "Final Boss",10, 5)
-skeleton = Enemy("Skeleton", "guard", 3, 1)
+skeleton = Enemy("Skeleton", "guard", 50, 10)
+warriors = Enemy("Ancient Egyptian Warriors", "Grunts", 75, 20)
+mummy_guardians = Enemy("Mummy Guardians", "Guards", 150, 30)
+pharaoh = Enemy("The Last Pharaoh", "Final Boss",500, 40)
 
 blacksmith = NPC("Hewg",
                  "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."

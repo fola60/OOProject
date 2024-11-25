@@ -11,24 +11,28 @@ class Game:
     def __init__(self):
          # initializes game variables
         self._current_location = PyramidGame().current_location
-        user_name = input("Enter name: ")
+        user_name = input("Enter your player's name: ")
         self.user = User(user_name, self._current_location)
         self.checkpoint = self.user.encode()
         self.ran = False
         self.running = False
+        self.stage = 1 # stage of location broken into 2 stages
+        self.stage_checkpoint = self.stage
 
 
 
     def save_checkpoint(self):
         """ Saves current game state at each door entry """
-        self.checkpoint = self._user.encode()
-
+        self.checkpoint = self.user.encode()
+        self.stage_checkpoint = self.stage
 
     def return_to_checkpoint(self):
         """ returns game state to last checkpoint"""
         from src.characters import User
-        self._user = User.decode(self.checkpoint)
-        self._current_location = self._user.location
+        self.user = User.decode(self.checkpoint)
+        self._current_location = self.user.location
+        self.stage = self.stage_checkpoint
+        self.run()
 
 
     @classmethod
@@ -51,19 +55,27 @@ class Game:
 
     def load(self, load_data):
         """ Loads previous saves """
+        self.user = self.checkpoint.decode()
+        self._current_location = self.user.location
         self.ran = True
         self.running = True
+        self.run()
 
 
     def introduction(self):
-        pass
+        timed_print(f"Greetings {self.user.name}!")
+        timed_print("You are a passionate archaeologist, renowned for his research of ancient Egyptian history.")
+        timed_print("You have spent the last two decades studying texts, deciphering hieroglyphs, and uncovering the secrets of Egypt’s past.")
+        timed_print("Lately, rumors have surfaced of a hidden treasure said to be of unimaginable power, buried deep within the tombs of to what is known now as The Last Pharaoh.")
+        timed_print("Given your extensive knowledge you know of the whereabouts of his tomb, giving you a headstart from other tomb raiders")
+        timed_print("Driven by a thirst for discovery and the possibility of revealing an ancient secret that could change history, you embark on this treacherous journey into the tombs")
 
     def run(self):
         """ runs game loop"""
         # game intro
         if not self.ran:
             while True:
-                timed_print("Enter 'l' to load previous save, enter 's' to start game")
+                timed_print("Enter 'l' to load previous save, enter 's' to start game", delay=0.03)
                 choice = input(": ").lower()
                 if choice == 'l':
                     if len(os.listdir("./Saves")) < 1: # if no save exists start game from beginning
@@ -101,7 +113,10 @@ class Game:
                     timed_print("Invalid input, try again")
         # game running
         else:
-            print("empty")
+            if self.stage == 1:
+                # npc interaction or chest discovery or load or save
+            elif self.stage == 2:
+                # mini game then battle
 
 game = Game()
 game.run()

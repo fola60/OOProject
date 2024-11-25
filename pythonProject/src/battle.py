@@ -14,10 +14,12 @@ class Battle:
 
     def player_turn(self):
         timed_print(f"{self.player.name}'s turn!")
+        timed_print("\n")
         choice = input("Do you want to attack (a) or use item (i)? ").lower()
 
         if choice == 'a':
-            return self.attack(self.player, self.enemy)
+            if self.attack(self.player, self.enemy):
+                return True
         elif choice == 'i':
             return self.equip_item()
         else:
@@ -30,15 +32,18 @@ class Battle:
 
     def attack(self, attacker, defender):
         #get basic damage from the attacker
-        damage = attacker.damage
+
+        if attacker.__class__.__name__ == 'User':
+            damage = config.damage_map[defender.name][attacker.weapon]
+        else:
+            damage = attacker.damage
         defender.take_damage(damage)
         timed_print(f"{attacker.name} attacks {defender.name} for {damage} damage!")
 
         if defender.health <= 0:
-            timed_print(f"{defender.name} has been defeated!")
             return True  #end the battle
         else:
-            timed_print(f"{defender.name} has {defender.health} health remaining.")
+            timed_print(f"{defender.name} has {int(defender.health)} health remaining.")
         return False  #continue the battle
 
     def equip_item(self):
@@ -47,23 +52,29 @@ class Battle:
             return False  #continue battle if no items
 
         timed_print("Available items:")
-        for i, item in self.player.inventory.get_equippable_items():
-            timed_print(f"{i + 1}. {item}")
+        for i, item in enumerate(self.player.inventory.get_equippable_items()):
+            timed_print(f"{i + 1}. {item}", delay=0.045)
 
+        # equip armour or weapon
         while True:
+            if len(self.player.inventory.get_equippable_items()) <= 0:
+                timed_print("No equippable items.")
+                self.player_turn()
+                break
             timed_print("Enter the number of the item you want to equip")
             try:
                 choice = int(input(": "))
-                self.player.equip(self.player.inventory.get_equippable_items()[choice - 1])
-                
+                if 1 <= choice <= len(self.player.inventory.get_equippable_items()):
+                    self.player.equip(self.player.inventory.get_equippable_items()[choice - 1])
+                else:
+                    timed_print("Invalid input!")
+                    self.equip_item()
                 break
             except ValueError:
-                timed_print("Wrong input try again.")
-
-        # equip armour or weapon
+                timed_print("Wrong input, try again.")
 
 
-        self.attack(self.player, self.enemy)
+        self.player_turn()
 
     def start_battle(self):
         while True:
@@ -83,8 +94,9 @@ class Battle:
 
 if __name__ == "__main__":
     player = User(name="Hero", location=None)  # Instantiate the User
-    enemy = Enemy(name='skeleton', rank='Guard', health=3, damage=1)  # Instantiate the Skeleton
+    enemy = Enemy(name='skeleton', rank='Guard', health=30, damage=20)  # Instantiate the Skeleton
     battle = Battle(player, enemy)# Initialize the battle with the player and enemy
-    player.inventory.items = 'torch' #add items to inventory for testing
-    player.inventory.items = 'mace'
+    player.inventory.items = 'mace' #add items to inventory for testing
     battle.start_battle()  # Start the battle loop
+
+#defeated enemy not working
