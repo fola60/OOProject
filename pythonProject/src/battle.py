@@ -3,14 +3,14 @@ from game_effects import timed_print
 from inventory import Inventory
 from characters import User
 from game_effects import timed_print
-from src.config import damage_map
-
+from characters import Enemy
+import config
 
 class Battle:
-    def __init__(self, player, enemy, damage_map):
+    def __init__(self, player, enemy):
         self.player = player
         self.enemy = enemy
-        self.damage_map = damage_map  #map of weapon damage against enemies
+
 
     def player_turn(self):
         timed_print(f"{self.player.name}'s turn!")
@@ -19,7 +19,7 @@ class Battle:
         if choice == 'a':
             return self.attack(self.player, self.enemy)
         elif choice == 'i':
-            return self.use_item()
+            return self.equip_item()
         else:
             timed_print("Invalid choice. You can only attack or use an item.")
             return self.player_turn()  #retry the player's turn
@@ -41,43 +41,29 @@ class Battle:
             timed_print(f"{defender.name} has {defender.health} health remaining.")
         return False  #continue the battle
 
-    def use_item(self):
-        if not self.player.inventory.items:
+    def equip_item(self):
+        if not self.player.inventory.get_equippable_items():
             timed_print("You have no items in your inventory!")
             return False  #continue battle if no items
 
         timed_print("Available items:")
-        self.player.inventory.display_items()
+        for i, item in self.player.inventory.get_equippable_items():
+            timed_print(f"{i + 1}. {item}")
 
-        try:
-            item_choice = int(input("Choose an item by number: ")) - 1  #adjust for 0 indexing
-            if 0 <= item_choice < len(self.player.inventory.items):
-                item = self.player.inventory.items[item_choice]  #get selected item
-                #looks up the damage for the selected item from the damage_map
-                damage = self.damage_map.get(self.enemy.name.lower(), {}).get(item, 0)
+        while True:
+            timed_print("Enter the number of the item you want to equip")
+            try:
+                choice = int(input(": "))
+                self.player.equip(self.player.inventory.get_equippable_items()[choice - 1])
+                
+                break
+            except ValueError:
+                timed_print("Wrong input try again.")
 
-                if damage > 0:
-                    timed_print(f"You used {item} against {self.enemy.name}, dealing {damage} damage!")
-                    self.enemy.take_damage(damage)
-                    #remove the item from the player's inventory after use
-                    self.player.inventory.use_item(item_choice)
+        # equip armour or weapon
 
-                    #check if the enemy is defeated
-                    if self.enemy.health <= 0:
-                        timed_print(f"{self.enemy.name} has been defeated!")
-                        return True  #end battle
-                    else:
-                        timed_print(f"{self.enemy.name} has {self.enemy.health} health remaining.")
-                else:
-                    timed_print(f"{item} is ineffective against {self.enemy.name}!")
-            else:
-                timed_print("Invalid selection.")
-        except ValueError:
-            timed_print("Invalid input. Please enter a number.")
-        except IndexError:
-            timed_print("Invalid item choice.")
 
-        return False  #continue battle if no valid item used
+        self.attack(self.player, self.enemy)
 
     def start_battle(self):
         while True:
@@ -96,9 +82,9 @@ class Battle:
 
 
 if __name__ == "__main__":
-    player = User(name="Hero", location=None, damage=3)  # Instantiate the User
-    enemy = Skeleton()  # Instantiate the Skeleton
-    battle = Battle(player, enemy, damage_map)# Initialize the battle with the player and enemy
+    player = User(name="Hero", location=None)  # Instantiate the User
+    enemy = Enemy(name='skeleton', rank='Guard', health=3, damage=1)  # Instantiate the Skeleton
+    battle = Battle(player, enemy)# Initialize the battle with the player and enemy
     player.inventory.items = 'torch' #add items to inventory for testing
     player.inventory.items = 'mace'
     battle.start_battle()  # Start the battle loop

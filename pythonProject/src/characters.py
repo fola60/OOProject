@@ -1,19 +1,41 @@
 # This file will contain all characters from which other files can import
-from abc import abstractproperty
+import config
 
+from distutils.command.config import config
 from abstract_classes import Character
 from game_effects import timed_print
 from inventory import Inventory
-from src.areas import PyramidGame
-import json
+
 
 class User(Character):
+
+
     def __init__(self, name, location):
         self.__location = location # Current player location
         self.name = name  # Player name
         self.__health = 5  # Player health
         self.inventory = Inventory()  # Player's inventory
         self.status = True  # True for alive false for dead
+        self.__weapon = None
+        self.__armour = None
+
+    @property
+    def weapon(self):
+        if self.__weapon is None:
+            return 'fist'
+
+    @weapon.setter
+    def weapon(self, value):
+        self.__weapon = value
+
+    @property
+    def armour(self):
+        if self.__armour is None:
+            return 'body'
+
+    @armour.setter
+    def armour(self, armour):
+        self.__armour = armour
 
 
     def introduction(self):
@@ -21,7 +43,7 @@ class User(Character):
 
 
     def take_damage(self, damage):
-        self.__health -= damage
+        self.__health -= damage / config.armour_negation_map[self.armour] # decrements health based on armour
 
 
     @property
@@ -45,6 +67,28 @@ class User(Character):
     @location.setter
     def location(self, location):
         self.__location = location
+
+    def consume(self, item):
+        """
+        consume item from inventory
+        if user consumers non-consumable items they lose health
+        """
+
+        if item not in config.consumable_item_list:
+            timed_print("Cannot consume that item.")
+            return
+
+        #if item in ['elixir', 'LifeWater', 'BlueLotus', 'charredApple', 'EnergyVial', 'CleansingSand']:
+        self.health = self.health + config.health_boost[item]
+        timed_print(f"Health increased by {config.health_boost[item]}")
+        return
+
+    def equip(self, item):
+        if item in ['JarOfHolding', 'PapyrusSatchel', 'BagOfTheDuat', 'PharaohBandolier']:
+            self.inventory.max_inventory_size = config.inventory_size_boost[item]
+            timed_print(f"Inventory size increased by {config.inventory_size_boost[item]}")
+            return
+
 
 
     def process_death(self):

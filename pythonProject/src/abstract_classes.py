@@ -58,13 +58,12 @@ class Location(ABC):
 
 
 
-
-
-
-
 class Storage(ABC):
 
     @abstractmethod
     def items(self):
         pass
 
+    @abstractmethod
+    def clear(self):
+        pass
