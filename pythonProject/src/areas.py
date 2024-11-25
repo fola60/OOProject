@@ -153,9 +153,3 @@ class PyramidGame:
         self.current_location = doors[0]
 
 
-test = PyramidGame()
-test.build_pyramid()
-encoded_location = test.current_location.encode()
-print(encoded_location)
-decoded_location = Door.decode(encoded_location)
-print(decoded_location.encode())

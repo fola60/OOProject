@@ -24,6 +24,12 @@ class Inventory(Storage):
         for i, item in enumerate(items):
             timed_print(f"{i + 1}: {item}")
 
+
+    def consume_item(self):
+        """ consume item for extra health or inventory space"""
+        pass
+
+
     def encode(self):
         """ encodes inventory into json object"""
         return {

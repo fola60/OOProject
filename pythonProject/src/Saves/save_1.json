@@ -1,0 +1,44 @@
+{
+    "name": "rand",
+    "location": {
+        "door_number": 0,
+        "left": {
+            "door_number": 1,
+            "left": {
+                "door_number": 3,
+                "left": null,
+                "right": null,
+                "mini_game": null
+            },
+            "right": {
+                "door_number": 4,
+                "left": null,
+                "right": null,
+                "mini_game": null
+            },
+            "mini_game": null
+        },
+        "right": {
+            "door_number": 2,
+            "left": {
+                "door_number": 5,
+                "left": null,
+                "right": null,
+                "mini_game": null
+            },
+            "right": {
+                "door_number": 6,
+                "left": null,
+                "right": null,
+                "mini_game": null
+            },
+            "mini_game": null
+        },
+        "mini_game": null
+    },
+    "health": 5,
+    "status": true,
+    "inventory": {
+        "items": []
+    }
+}
