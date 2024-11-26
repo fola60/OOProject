@@ -4,6 +4,7 @@ from inventory import Inventory
 from characters import User
 from game_effects import timed_print
 from characters import Enemy
+from soundtest import winsound
 import config
 
 class Battle:
@@ -95,6 +96,7 @@ class Battle:
 if __name__ == "__main__":
     player = User(name="Hero", location=None)  # Instantiate the User
     enemy = Enemy(name='skeleton', rank='Guard', health=30, damage=20)  # Instantiate the Skeleton
+    winsound.PlaySound('', 0)
     battle = Battle(player, enemy)# Initialize the battle with the player and enemy
     player.inventory.items = 'mace' #add items to inventory for testing
     battle.start_battle()  # Start the battle loop
