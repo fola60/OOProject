@@ -83,7 +83,7 @@ class Battle:
             #player turn and check if they won
             if self.player_turn():
                 timed_print(f"{self.player.name} wins the battle!")
-                winsound.PlaySound('Victory.wav', 0) # Sound effect for hero's victory
+                winsound.PlaySound('Victory.wav', 0) # Sound effect for hero's victory.
                 break  #end battle
 
             #enemy turn and check if they won
