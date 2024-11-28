@@ -36,6 +36,7 @@ class Battle:
 
         if attacker.__class__.__name__ == 'User':
             damage = config.damage_map[defender.name][attacker.weapon]
+            winsound.PlaySound('Punch.wav', 0) # Hero's attack sound effect
         else:
             damage = attacker.damage
         defender.take_damage(damage)
@@ -82,6 +83,7 @@ class Battle:
             #player turn and check if they won
             if self.player_turn():
                 timed_print(f"{self.player.name} wins the battle!")
+                winsound.PlaySound('Victory.wav', 0) # Sound effect for hero's victory
                 break  #end battle
 
             #enemy turn and check if they won
@@ -100,5 +102,6 @@ if __name__ == "__main__":
     battle = Battle(player, enemy)# Initialize the battle with the player and enemy
     player.inventory.items = 'mace' #add items to inventory for testing
     battle.start_battle()  # Start the battle loop
+
 
 #defeated enemy not working
