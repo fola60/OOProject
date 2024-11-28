@@ -7,7 +7,7 @@ import random
 from game_effects import timed_print
 
 def input_with_timeout(prompt, timeout):
-    print(prompt, end='', flush=True)
+    timed_print(prompt, end='', flush=True)
     start_time = time.time()
     user_input = ''
 
@@ -45,7 +45,7 @@ class MiniGames:
             user_input = input_with_timeout("Enter the letter G to disarm it! Quick!!", timeout=time)
             return 'G' == user_input.strip()  # .strip() removes spaces around char
         except Exception as e:
-            print(f"Error: {e}")
+            timed_print(f"Error: {e}")
             return False
 
 
@@ -71,12 +71,12 @@ class MiniGames:
                 return False
             return choice == answer + 1  # return True if user input was correct, + 1 to make up for index
         except ValueError:
-            print("invalid input")
+            timed_print("invalid input")
             time.sleep(1) # clears input buffer
             return False
 
     def memory_match(self, msg1, msg2):
-        print(msg1)
+        timed_print(msg1)
         number = random.randint(800000, 999999)
         print(number)
         time.sleep(2.5)
@@ -84,20 +84,17 @@ class MiniGames:
 
         tries = 3
         while tries > 0:
-            print(f"Quick guess the {msg2}")
+            timed_print(f"Quick guess the {msg2}")
             try:
                 guess = int(input("Enter the number: "))
                 if guess == number:
-                    print("Correct!")
+                    timed_print("Correct!")
                     return True
                 else:
-                    print("Wrong!")
+                    timed_print("Wrong!")
                     tries -= 1
             except ValueError:
-                print("Enter a valid number.")
+                timed_print("Enter a valid number.")
 
         timed_print("Out of tries! The number was:", number)
-
-mini_games = MiniGames()
-mini_games.memory_match("Memorize this number:", "number")
-mini_games.word_jumble("hey")
+        return False

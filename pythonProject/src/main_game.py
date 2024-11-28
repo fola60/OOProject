@@ -23,6 +23,7 @@ class Game:
 
     def save_checkpoint(self):
         """ Saves current game state at each door entry """
+        timed_print("Saving...")
         self.checkpoint = self.user.encode()
         self.stage_checkpoint = self.stage
 
@@ -114,9 +115,12 @@ class Game:
         # game running
         else:
             if self.stage == 1:
-                # npc interaction or chest discovery or load or save
+                while True:
+                    choice = input("Enter 'l' to load previous save, 'r' to return to checkpoint, 'e' to explore area ",)
+            # npc interaction or chest discovery or load or save
             elif self.stage == 2:
-                # mini game then battle
+                self._current_location.play_minigame()
+                self._current_location.fight_guard(self.user, self._current_location.enemy)
 
 game = Game()
 game.run()

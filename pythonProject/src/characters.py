@@ -1,8 +1,8 @@
 # This file will contain all characters from which other files can import
-import config
+
 from abstract_classes import Character
 from game_effects import timed_print
-from inventory import Inventory
+
 
 
 
@@ -10,10 +10,12 @@ class User(Character):
 
 
     def __init__(self, name, location):
+        super().__init__()
         self.__location = location # Current player location
         self.name = name  # Player name
         self.__health = 100  # Player health
         self.max_health_size = 100
+        from inventory import  Inventory # Done here to avoid circular imports
         self.inventory = Inventory()  # Player's inventory
         self.status = True  # True for alive false for dead
         self.__weapon = None
@@ -41,10 +43,11 @@ class User(Character):
 
 
     def introduction(self):
-        print(f"{self.name} enters the world at {self.__location}. Good luck!")
+        timed_print(f"{self.name} enters the world at door {self.__location.door_number}. Good luck!")
 
 
     def take_damage(self, damage):
+        import config # Done here due to circular imports
         self.__health -= damage / config.armour_negation_map[self.armour] # decrements health based on armour
 
 
@@ -77,11 +80,13 @@ class User(Character):
         if user consumers non-consumable items they lose health
         """
 
+        import config  # Done here due to circular imports
+
         if item not in config.consumable_item_list:
             timed_print("Cannot consume that item.")
             return
 
-        if item in config.health_item_list:
+        if item in config.health_gain_list:
             self.health = self.health + config.health_gain[item]
             timed_print(f"Health increased by {config.health_gain[item]}")
             return
@@ -92,6 +97,8 @@ class User(Character):
             return
 
     def equip(self, item):
+        import config  # Done here due to circular imports
+
         if item not in config.equippable_item_list:
             timed_print("Item not equippable")
             return
@@ -119,6 +126,22 @@ class User(Character):
     def check_status(self): # Checks current status of Player
         return f"Health: {self.__health},  Inventory: {self.inventory}"
 
+    def interact_with_chest(self):
+        chest = self.location.chest
+        chest.display_items()
+        while True:
+            try:
+                if self.inventory.max_inventory_size - len(self.inventory.items):
+                    choice = int(input("Choose number of item you want to add to your inventory."))
+                    item = chest.pick_items(choice - 1)
+                    self.inventory.items = item
+                    timed_print(f"You have added {item} to your inventory {self.inventory.max_inventory_size - len(self.inventory.items)} space remaining")
+                else:
+                    timed_print("No more inventory space.")
+                    break
+            except ValueError:
+                timed_print("Cannot choose that item.")
+
 
     def encode(self):
         """ encodes character class to json object"""
@@ -141,6 +164,7 @@ class User(Character):
         from areas import Door
         instance = User(data["name"], Door.decode(data["location"]) )
         instance.health = data["health"]
+        from inventory import Inventory
         instance.inventory = Inventory.decode(data["inventory"])
         instance.armour = data["armour"]
         instance.weapon = data["weapon"]
@@ -187,39 +211,22 @@ class NPC(Character):
     def __init__(self, name, role, dialog):
         self.name = name
         self.role = role
-        self.__dialog = dialog
+        self.dialog = dialog
         self._interacted = False
 
 
     def interact(self):
         if not self._interacted:
             self.introduction()
+            timed_print(f"{self.dialog}")
             self._interacted = True
         else:
-            timed_print("{self.name} has already been interacted with.")
+            self.introduction()
+            timed_print(f"{self.name} has already been interacted with. {self.role}")
 
 
     def introduction(self):
-        timed_print(f"Hello my name is {self.name}")
+        timed_print(f"Hello I am {self.name}, {self.role}")
 
 
-skeleton = Enemy("Skeleton", "guard", 50, 10)
-warriors = Enemy("Ancient Egyptian Warriors", "Grunts", 75, 20)
-mummy_guardians = Enemy("Mummy Guardians", "Guards", 150, 30)
-pharaoh = Enemy("The Last Pharaoh", "Final Boss",500, 40)
-
-blacksmith = NPC("Hewg",
-                 "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."
-                                    "His origin is unknown, all thats known is that he is bound to the tomb and cursed to forever work on his craft ",
-                "I forge, for it is my purpose. What can i offer thee")
-
-priestess = NPC("Priestess",
-                "Role: A ghost or spirit who once tended to the tomb’s rituals and now offers cryptic advice."
-                                        "She is bound to the tomb and may offer clues to solve puzzles.",
-                "I can off thee the answer to the riddles but at a cost")
-
-prisoner = NPC("The Prisoner",
-               "A former archaeologist or explorer who got trapped inside the tomb long ago."
-                                        "He may have valuable information but is wary of helping.",
-               "There’s a trap ahead, step on that plate and you’ll need quick hands to survive. ")
 

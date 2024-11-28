@@ -76,8 +76,12 @@ class Inventory(Storage):
 
 
 class Chest(Storage):
-    def __init__(self):
-        self.__items = []
+    def __init__(self, items=None):
+        if items is None:
+            self.__items = []
+        else:
+            self.__items = items
+
 
     @property
     def items(self):
@@ -99,14 +103,5 @@ class Chest(Storage):
     def clear(self):
         self.__items = []
 
-"""chest = Chest()
-chest.items = "NUKE"
-
-chest.display_items()
-item = chest.pick_items(0)
-if item:
-    Inventory.items = item"""
-
-"""TORCH (can light mummy on fire),"""
 
 

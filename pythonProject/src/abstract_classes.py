@@ -53,7 +53,7 @@ class Location(ABC):
         pass
 
     @abstractmethod
-    def interact_with_npc(self):
+    def interact_with_npc(self, npc):
         """ Gain information from local npc"""
         pass
 
@@ -67,7 +67,7 @@ class Location(ABC):
         }
 
     @abstractmethod
-    def view_chest(self):
+    def view_chest(self, chest):
         pass
 
 

@@ -3,17 +3,21 @@ A location class for the locations, it will have left and right
 
 """
 
-from abc import ABC, abstractmethod
-from config import damage_map
 from abstract_classes import Location
-
+from mini_games import MiniGames
+from characters import Enemy, NPC
 
 
 
 class Door(Location):
-    def __init__(self, door_number):
+    def __init__(self, door_number, chest=None):
         super().__init__(door_number)
         self.end_of_game = False
+        self.chest = chest
+        self.door_number = door_number
+        self.enemy = None
+        self.description_stage1 = "" # description of stage 1 area
+        self.description_stage2 = "" # description of stage 2 area
 
     @property
     def left(self):
@@ -49,11 +53,11 @@ class Door(Location):
         guard_fight = Battle(player, enemy)
         guard_fight.start_battle()
 
-    def interact_with_npc(self):
-        pass
+    def interact_with_npc(self, npc):
+        npc.interact()
 
-    def view_chest(self):
-        pass
+    def view_chest(self, chest):
+        chest.display_items()
 
 
     @classmethod
@@ -76,23 +80,70 @@ class PyramidGame:
 
         # Build the pyramid structure
         # Level 0 (top)
+        from inventory import Chest # done here to avoid circular imports
+        skeleton = Enemy("skeleton", "guard", 50, 40)
+        warriors = Enemy("ancient egyptian warriors", "Grunts", 75, 50)
+        mummy_guardians = Enemy("mummy guardians", "Guards", 150, 60)
+        pharaoh = Enemy("the last pharaoh", "Final Boss", 800, 80)
+
+        blacksmith = NPC("Hewg",
+                          "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."
+                             "\nHis origin is unknown, all that's known is that he is bound to the tomb and cursed to forever work on his craft ",
+                          "\"Feeling challenged against the first enemy, the chest in the far corner, it should have the perfect tool\"")
+
+        priestess = NPC("Priestess",
+                         "Role: A ghost or spirit who once tended to the tomb’s rituals and now offers cryptic advice."
+                         "\nShe is bound to the tomb and may offer clues to solve puzzles.",
+                         "\"The answers you may come to seek will have to do with a weapon.\"")  # jumbled word will be scepter
+
+        prisoner = NPC("The Prisoner",
+                        "A former archaeologist or explorer who got trapped inside the tomb long ago."
+                        "\nHe may have valuable information but is wary of helping.",
+                       "\"There’s a trap ahead, step on that plate and you’ll need quick hands to survive.\"")
+
+        spirit = NPC("Wandering Spirit",
+                      "A wandering spirit trying to reclaim it's lost body.",
+                      "\"To overcome the last pharaoh, you must wield the scepter of ra. Only with the aegis of anubis can you withstand the devastating might of your enemy.\"")
+
         self.root = doors[0]
+        doors[0].interact_with_npc(blacksmith) # interaction for blacksmith npc
+        doors[0].enemy = skeleton
+        doors[0].chest = Chest(['mace', 'torch', 'jar of holding', 'chainmail', 'leather guard', 'life water', 'elixir','blue lotus'])
 
         # Level 1
         self.root.left = doors[1]
         self.root.right = doors[2]
+        doors[1].interact_with_npc(priestess) # interaction for priestess npc
+        doors[1].enemy = warriors
+        doors[1].chest = Chest(['jar of holding', 'bronze sentinal', 'obsidian dagger', 'obelisk hammer','sacred lotus petal','blue lotus'])
 
         # Level 2 (bottom)
         doors[1].left = doors[3]
         doors[1].right = doors[4]
         doors[2].left = doors[5]
         doors[2].right = doors[6]
+        doors[2].interact_with_npc(prisoner) # interaction for prisoner npc
+        doors[2].chest = Chest(['papyrus satchel','golden pharos','scorpion tail bow', 'obelisk hammer', 'elixir', 'energy vial','charred apple'])
+        doors[2].enemy = mummy_guardians
 
+
+        # level 3
         for door in range(3, 7):
             doors[door].end_of_game = True
+            doors[door].interact_with_npc(spirit) # interaction for spirit npc
+            doors[door].enemy = pharaoh
+
+        doors[3].chest = Chest(['aegis of anubis', 'scepter of ra', 'bag of duat', 'elixir', 'cleansing sand' 'energy vial'])
+        doors[4].chest = Chest(['aegis of anubis', 'elixir','scepter of ra', 'charred apple', 'sacred lotus petal', 'papyrus satchel', 'cleansing sand'])
+        doors[5].chest = Chest(['aegis of anubis', 'elixir','scepter of ra', 'bag of duat', 'ra sun balm', 'charred apple'])
+        doors[6].chest = Chest(['aegis of anubis', 'elixir','scepter of ra', 'elixir','papyrus satchel', 'osiris blessing', 'energy vial'])
 
 
-        # Start at bottom left
+
+
+    # Start at bottom left
         self.current_location = doors[0]
 
 
+area = PyramidGame()
+area.current_location.display_items()
