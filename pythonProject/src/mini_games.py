@@ -87,18 +87,18 @@ class MiniGames:
             return False
 
     def memory_match(self, msg1, msg2):
-        timed_print(msg1)
-        number = random.randint(800000, 999999)
+        timed_print(msg1) # displays first parameter
+        number = random.randint(800000, 999999) # generates random number
         timed_print(f"Quick remember the {msg2}")
         print(number)
         time.sleep(2.5)
-        print("\n" * 1000)
+        print("\n" * 1000) # moves terminal down to hide number
 
         tries = 3
 
-        while tries > 0:
+        while tries > 0: # loops until user has no more tries
             try:
-                guess = int(input("Enter the number: "))
+                guess = int(input("Enter the number: ")) # prompts user for guess
                 if guess == number:
                     timed_print("Correct!")
                     return True
@@ -106,7 +106,7 @@ class MiniGames:
                     tries -= 1
                     if tries:
                         timed_print("Wrong try again!")
-            except ValueError:
+            except ValueError: # if user enters non integer
                 timed_print("Enter a valid number.")
 
         timed_print(f"Out of tries! The number was: {number}")

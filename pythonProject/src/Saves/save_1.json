@@ -134,22 +134,23 @@
         },
         "chest": {
             "items": [
+                "mace",
                 "torch",
                 "jar of holding",
                 "chainmail",
                 "leather guard",
                 "life water",
+                "elixir",
                 "blue lotus"
             ]
         }
     },
     "health": 100,
+    "max_health": 100,
     "status": true,
     "inventory": {
-        "items": [
-            "elixir",
-            "mace"
-        ]
+        "items": [],
+        "max_inventory_size": 3
     },
     "weapon": "fist",
     "armour": "body"

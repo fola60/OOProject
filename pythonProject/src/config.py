@@ -2,7 +2,7 @@
 weapon_list = ['fist', 'mace', 'torch', 'scepter of ra', 'obsidian dagger', 'obelisk hammer', 'scorpion tail bow'] # list of equippable weapons
 
 #INVENTORY
-inventory_size_boost = {'jar of holding' : 4, 'papyrus satchel' : 5, 'bag of duat' : 6} # maps items that increase storage size to the amount they increase storage size
+inventory_size_boost = {'jar of holding' : 5, 'papyrus satchel' : 6, 'bag of duat' : 7} # maps items that increase storage size to the amount they increase storage size
 bag_list = ['jar of holding', 'papyrus satchel', 'bag of the duat'] # list of equipabble items that increases inventory size
 bag_size_map = {'jar of holding': 4, 'papyrus satchel': 5, 'bag of duat': 6} # maps bags to increased size
 
@@ -42,7 +42,7 @@ enemies = ['skeleton', 'ancient egyptian warriors', 'mummy guardians', 'the last
 #DAMAGE MAP
 damage_map = {} # maps weapons to the damage they do
 for enemy in enemies:
-    damage_map[enemy] = {} # how this would be hard coded, damage_map = {'skeleton': {}}
+    damage_map[enemy] = {}
 
 damage_map['skeleton']['fist'] = 10
 damage_map['skeleton']['mace'] = 50
@@ -78,6 +78,7 @@ damage_map['the last pharaoh']['scepter of ra'] = 150
 
 from mini_games import MiniGames
 # games
+# defining predefined games
 games = MiniGames()
 game1 = lambda: games.memory_match("You see symbols fading on the wall.", "hieroglyphs")
 game2 = lambda: games.word_jumble("scepter", "To advance you must call upon the name of the weapon once wielded by the powerful Ra.")
@@ -90,14 +91,14 @@ game7 = lambda: games.word_jumble("energy", "A strange text appears in front of 
 # npc's
 from characters import NPC
 blacksmith = NPC("Hewg",
-                          "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."
+                "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."
                              "\nHis origin is unknown, all that's known is that he is bound to the tomb and cursed to forever work on his craft ",
-                          "\"Feeling challenged against the first enemy, the chest in the far corner, it should have the perfect tool\"")
+                "\"Feeling challenged against the first enemy, the chest in the far corner, it should have the perfect tool\"")
 
 priestess = NPC("Priestess",
                  "Role: A ghost or spirit who once tended to the tomb’s rituals and now offers cryptic advice."
                     "\nShe is bound to the tomb and may offer clues to solve puzzles.",
-                 "\"The answers you may come to seek will have to do with a weapon.\"")  # jumbled word will be scepter
+                 "\"The answers you may come to seek will have to do with a weapon.\"")
 
 prisoner = NPC("The Prisoner",
                 "A former archaeologist or explorer who got trapped inside the tomb long ago."

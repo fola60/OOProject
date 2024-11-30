@@ -1,0 +1,36 @@
+{
+    "name": "fola",
+    "location": {
+        "door_number": 5,
+        "left": null,
+        "right": null,
+        "enemy": {
+            "name": "the last pharaoh",
+            "health": 800,
+            "rank": "Final Boss",
+            "damage": 80
+        },
+        "end_of_game": true,
+        "chest": {
+            "items": [
+                "aegis of anubis",
+                "elixir",
+                "scepter of ra",
+                "bag of duat",
+                "ra sun balm",
+                "charred apple"
+            ]
+        }
+    },
+    "health": 60.0,
+    "max_health": 100,
+    "status": true,
+    "inventory": {
+        "items": [
+            "mace"
+        ],
+        "max_inventory_size": 3
+    },
+    "weapon": "mace",
+    "armour": "body"
+}
