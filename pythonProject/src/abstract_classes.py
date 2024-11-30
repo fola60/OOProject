@@ -17,6 +17,8 @@ class Location(ABC):
         self._right = None
         self._door_number = door_number
         self._minigame = None
+        self.enemy = None
+        self.chest = None
 
     @property
     @abstractmethod
@@ -59,11 +61,14 @@ class Location(ABC):
 
     def encode(self):
         """ encodes class into json object"""
+
         return {
             "door_number": self._door_number,
             "left": self._left.encode() if self._left else None,
             "right": self._right.encode() if self._right else None,
-            "mini_game": self._minigame,
+            "enemy": self.enemy.encode(),
+            "chest": self.chest.encode()
+
         }
 
     @abstractmethod

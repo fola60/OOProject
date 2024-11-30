@@ -1,5 +1,5 @@
 {
-    "name": "rand",
+    "name": "fola",
     "location": {
         "door_number": 0,
         "left": {
@@ -8,15 +8,60 @@
                 "door_number": 3,
                 "left": null,
                 "right": null,
-                "mini_game": null
+                "enemy": {
+                    "name": "the last pharaoh",
+                    "health": 800,
+                    "rank": "Final Boss",
+                    "damage": 80
+                },
+                "chest": {
+                    "items": [
+                        "aegis of anubis",
+                        "scepter of ra",
+                        "bag of duat",
+                        "elixir",
+                        "cleansing sandenergy vial"
+                    ]
+                }
             },
             "right": {
                 "door_number": 4,
                 "left": null,
                 "right": null,
-                "mini_game": null
+                "enemy": {
+                    "name": "the last pharaoh",
+                    "health": 800,
+                    "rank": "Final Boss",
+                    "damage": 80
+                },
+                "chest": {
+                    "items": [
+                        "aegis of anubis",
+                        "elixir",
+                        "scepter of ra",
+                        "charred apple",
+                        "sacred lotus petal",
+                        "papyrus satchel",
+                        "cleansing sand"
+                    ]
+                }
             },
-            "mini_game": null
+            "enemy": {
+                "name": "ancient egyptian warriors",
+                "health": 75,
+                "rank": "Grunts",
+                "damage": 50
+            },
+            "chest": {
+                "items": [
+                    "jar of holding",
+                    "bronze sentinal",
+                    "obsidian dagger",
+                    "obelisk hammer",
+                    "sacred lotus petal",
+                    "blue lotus"
+                ]
+            }
         },
         "right": {
             "door_number": 2,
@@ -24,21 +69,88 @@
                 "door_number": 5,
                 "left": null,
                 "right": null,
-                "mini_game": null
+                "enemy": {
+                    "name": "the last pharaoh",
+                    "health": 800,
+                    "rank": "Final Boss",
+                    "damage": 80
+                },
+                "chest": {
+                    "items": [
+                        "aegis of anubis",
+                        "elixir",
+                        "scepter of ra",
+                        "bag of duat",
+                        "ra sun balm",
+                        "charred apple"
+                    ]
+                }
             },
             "right": {
                 "door_number": 6,
                 "left": null,
                 "right": null,
-                "mini_game": null
+                "enemy": {
+                    "name": "the last pharaoh",
+                    "health": 800,
+                    "rank": "Final Boss",
+                    "damage": 80
+                },
+                "chest": {
+                    "items": [
+                        "aegis of anubis",
+                        "elixir",
+                        "scepter of ra",
+                        "elixir",
+                        "papyrus satchel",
+                        "osiris blessing",
+                        "energy vial"
+                    ]
+                }
             },
-            "mini_game": null
+            "enemy": {
+                "name": "mummy guardians",
+                "health": 150,
+                "rank": "Guards",
+                "damage": 60
+            },
+            "chest": {
+                "items": [
+                    "papyrus satchel",
+                    "golden pharos",
+                    "scorpion tail bow",
+                    "obelisk hammer",
+                    "elixir",
+                    "energy vial",
+                    "charred apple"
+                ]
+            }
         },
-        "mini_game": null
+        "enemy": {
+            "name": "skeleton",
+            "health": 50,
+            "rank": "guard",
+            "damage": 40
+        },
+        "chest": {
+            "items": [
+                "torch",
+                "jar of holding",
+                "chainmail",
+                "leather guard",
+                "life water",
+                "blue lotus"
+            ]
+        }
     },
-    "health": 5,
+    "health": 100,
     "status": true,
     "inventory": {
-        "items": []
-    }
+        "items": [
+            "elixir",
+            "mace"
+        ]
+    },
+    "weapon": "fist",
+    "armour": "body"
 }

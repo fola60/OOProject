@@ -1,4 +1,5 @@
 # This file will contain all characters from which other files can import
+from distutils.command.install import install
 
 from abstract_classes import Character
 from game_effects import timed_print
@@ -25,7 +26,6 @@ class User(Character):
     def weapon(self):
         if self.__weapon is None:
             return 'fist'
-
         return self.__weapon
 
     @weapon.setter
@@ -36,6 +36,7 @@ class User(Character):
     def armour(self):
         if self.__armour is None:
             return 'body'
+        return self.__armour
 
     @armour.setter
     def armour(self, armour):
@@ -89,11 +90,17 @@ class User(Character):
         if item in config.health_gain_list:
             self.health = self.health + config.health_gain[item]
             timed_print(f"Health increased by {config.health_gain[item]}")
+            self.inventory.use_item(
+                self.inventory.items.index(item)
+            ) # gets the index of the item and applies the use_item function with that index
             return
 
         if item in config.max_health_item_list:
             self.max_health_size = self.max_health_size + config.health_boost[item]
             timed_print(f"Max health increased by {config.health_boost[item]}")
+            self.inventory.use_item(
+                self.inventory.items.index(item)
+            )  # gets the index of the item and applies the use_item function with that index
             return
 
     def equip(self, item):
@@ -105,7 +112,7 @@ class User(Character):
 
         if item in config.bag_list:
             self.inventory.max_inventory_size = config.inventory_size_boost[item]
-            timed_print(f"Inventory size increased by {config.inventory_size_boost[item]}")
+            timed_print(f"Inventory size increased to {config.inventory_size_boost[item]}")
             return
 
         if item in config.weapon_list:
@@ -124,7 +131,7 @@ class User(Character):
 
 
     def check_status(self): # Checks current status of Player
-        return f"Health: {self.__health},  Inventory: {self.inventory}"
+         timed_print(f"Health: {self.__health},  Inventory: {self.inventory.display_items()}")
 
     def interact_with_chest(self):
         chest = self.location.chest
@@ -132,7 +139,9 @@ class User(Character):
         while True:
             try:
                 if self.inventory.max_inventory_size - len(self.inventory.items):
-                    choice = int(input("Choose number of item you want to add to your inventory."))
+                    choice = int(input("Choose ID of item you want to add to your inventory or choose -1 to exit"))
+                    if choice == -1:
+                        break
                     item = chest.pick_items(choice - 1)
                     self.inventory.items = item
                     timed_print(f"You have added {item} to your inventory {self.inventory.max_inventory_size - len(self.inventory.items)} space remaining")
@@ -152,7 +161,7 @@ class User(Character):
             "status": self.status,
             "inventory": self.inventory.encode(),
             "weapon": self.weapon,
-            "armour": self.armour
+            "armour": self.armour,
         }
 
 
@@ -166,8 +175,8 @@ class User(Character):
         instance.health = data["health"]
         from inventory import Inventory
         instance.inventory = Inventory.decode(data["inventory"])
-        instance.armour = data["armour"]
         instance.weapon = data["weapon"]
+        instance.armour = data["armour"]
         instance.status = True
 
         return instance
@@ -206,6 +215,19 @@ class Enemy(Character):
         self.__health -= damage
 
 
+    def encode(self):
+        return {
+            "name": self.name,
+            "health": self.health,
+            "rank": self.rank,
+            "damage": self.damage
+        }
+
+    @classmethod
+    def decode(cls, data):
+        instance = Enemy(data["name"], int(data["health"]), data["rank"], int(data["damage"]))
+        return instance
+
 
 class NPC(Character):
     def __init__(self, name, role, dialog):
@@ -227,6 +249,5 @@ class NPC(Character):
 
     def introduction(self):
         timed_print(f"Hello I am {self.name}, {self.role}")
-
 
 

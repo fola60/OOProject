@@ -103,5 +103,17 @@ class Chest(Storage):
     def clear(self):
         self.__items = []
 
+    def encode(self):
+        """ encodes chest into json object"""
+        return {
+            "items": self.items
+        }
+
+    @classmethod
+    def decode(cls, data):
+        """ decodes json object of class inventory into class inventory"""
+        instance = Inventory(data["items"])
+        return instance
+
 
 

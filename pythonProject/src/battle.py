@@ -1,15 +1,8 @@
-import pygame
-
-from abstract_classes import Character
-from game_effects import timed_print
-from inventory import Inventory
 from characters import User
 from game_effects import timed_print
 from characters import Enemy
-from soundtest import PlaySound
 import config
-import os
-
+from sound import PlaySound
 
 
 class Battle:
@@ -41,7 +34,7 @@ class Battle:
 
         if attacker.__class__.__name__ == 'User':
             damage = config.damage_map[defender.name][attacker.weapon]
-            os.system("afplay Victory.wav")
+            PlaySound.playPunchSound() # Playing the sound of the player attacking
         else:
             damage = attacker.damage
         defender.take_damage(damage)
@@ -88,9 +81,7 @@ class Battle:
             #player turn and check if they won
             if self.player_turn():
                 timed_print(f"{self.player.name} wins the battle!")
-                #audio = PlaySound()
-                #audio.playWinSound()
-                os.system("afplay Victory.wav")
+                PlaySound.playWinSound() # Playing the victory sound using the method in sound.py
                 break  #end battle
 
             #enemy turn and check if they won
@@ -100,14 +91,6 @@ class Battle:
 
 
 
-
-
-if __name__ == "__main__":
-    player = User(name="Hero", location=None)  # Instantiate the User
-    enemy = Enemy(name='skeleton', rank='Guard', health=30, damage=20)  # Instantiate the Skeleton
-    battle = Battle(player, enemy)# Initialize the battle with the player and enemy
-    player.inventory.items = 'mace' #add items to inventory for testing
-    battle.start_battle()  # Start the battle loop
 
 
 #defeated enemy not working

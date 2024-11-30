@@ -7,7 +7,7 @@ import random
 from game_effects import timed_print
 
 def input_with_timeout(prompt, timeout):
-    timed_print(prompt, end='', flush=True)
+    timed_print(prompt)
     start_time = time.time()
     user_input = ''
 
@@ -32,10 +32,20 @@ class MiniGames:
 
 
         timed_print("Unscramble this word: " + jumbled_word, delay=0.3)
-        guess = input("Rearranged word: ")
-        time.sleep(1) # clears input buffer
-        return guess == word # checks if guess was correct return True if it is and false otherwise
 
+        tries = 3
+        while tries > 0:
+            guess = input("Rearranged word: ")
+            if guess == word:
+                timed_print("Correct!")
+                return True
+            else:
+                timed_print("Wrong!")
+                tries -= 1
+
+        timed_print(f"The correct word was: {word}")
+        time.sleep(1)  # clears input buffer
+        return False
 
     def quick_click(self, msg="", time=2):
         # game where player has to input a charcter within {time} time, msg prints at the start of the function
@@ -48,6 +58,7 @@ class MiniGames:
             timed_print(f"Error: {e}")
             return False
 
+        return False
 
     def quiz(self, qs:str , answers:[], answer: int):
         # function that displays multiple choice question and checks for correct answer
@@ -78,23 +89,25 @@ class MiniGames:
     def memory_match(self, msg1, msg2):
         timed_print(msg1)
         number = random.randint(800000, 999999)
+        timed_print(f"Quick remember the {msg2}")
         print(number)
         time.sleep(2.5)
         print("\n" * 1000)
 
         tries = 3
+
         while tries > 0:
-            timed_print(f"Quick guess the {msg2}")
             try:
                 guess = int(input("Enter the number: "))
                 if guess == number:
                     timed_print("Correct!")
                     return True
                 else:
-                    timed_print("Wrong!")
                     tries -= 1
+                    if tries:
+                        timed_print("Wrong try again!")
             except ValueError:
                 timed_print("Enter a valid number.")
 
-        timed_print("Out of tries! The number was:", number)
+        timed_print(f"Out of tries! The number was: {number}")
         return False

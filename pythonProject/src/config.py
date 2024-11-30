@@ -1,6 +1,4 @@
 #WEAPONS
-from characters import NPC, Enemy
-
 weapon_list = ['fist', 'mace', 'torch', 'scepter of ra', 'obsidian dagger', 'obelisk hammer', 'scorpion tail bow'] # list of equippable weapons
 
 #INVENTORY
@@ -77,6 +75,59 @@ damage_map['the last pharaoh']['scorpion tail bow'] = 40
 damage_map['the last pharaoh']['obsidian dagger'] = 60
 damage_map['the last pharaoh']['obelisk hammer'] = 70
 damage_map['the last pharaoh']['scepter of ra'] = 150
+
+from mini_games import MiniGames
+# games
+games = MiniGames()
+game1 = lambda: games.memory_match("You see symbols fading on the wall.", "hieroglyphs")
+game2 = lambda: games.word_jumble("scepter", "To advance you must call upon the name of the weapon once wielded by the powerful Ra.")
+game3 = lambda: games.quick_click("You have stepped on a pressure plate causing the room to enclose rapidly", 3)
+game4 = lambda: games.quick_click("You have stepped on a pressure plate causing the room to enclose rapidly", 3)
+game5 = lambda: games.memory_match("You fall and hit your head. Strange numbers appear in your head, to advance recite the numbers.", "combination")
+game6 = lambda: games.quick_click("You fell over a tripwire. Spikes begin moving in from the ceiling", 3)
+game7 = lambda: games.word_jumble("energy", "A strange text appears in front of you, what could it mean?")
+
+# npc's
+from characters import NPC
+blacksmith = NPC("Hewg",
+                          "A skilled blacksmith who has been working for centuries, crafting and maintaining tools, weapons and armour."
+                             "\nHis origin is unknown, all that's known is that he is bound to the tomb and cursed to forever work on his craft ",
+                          "\"Feeling challenged against the first enemy, the chest in the far corner, it should have the perfect tool\"")
+
+priestess = NPC("Priestess",
+                 "Role: A ghost or spirit who once tended to the tomb’s rituals and now offers cryptic advice."
+                    "\nShe is bound to the tomb and may offer clues to solve puzzles.",
+                 "\"The answers you may come to seek will have to do with a weapon.\"")  # jumbled word will be scepter
+
+prisoner = NPC("The Prisoner",
+                "A former archaeologist or explorer who got trapped inside the tomb long ago."
+                    "\nHe may have valuable information but is wary of helping.",
+               "\"There’s a trap ahead, step on that plate and you’ll need quick hands to survive.\"")
+
+spirit = NPC("Wandering Spirit",
+              "A wandering spirit trying to reclaim it's lost body.",
+              "\"To overcome the last pharaoh, you must wield the scepter of ra. Only with the aegis of anubis can you withstand the devastating might of your enemy.\"")
+
+
+minigame_to_map = { # maps mini-game parameters to minigame function
+    0: game1,
+    1: game2,
+    2: game3,
+    3: game4,
+    4: game5,
+    5: game6,
+    6: game7
+}
+
+npc_to_map = {
+    0: blacksmith,
+    1: priestess,
+    2: prisoner,
+    3: spirit,
+    4: spirit,
+    5: spirit,
+    6: spirit
+}
 
 
 
